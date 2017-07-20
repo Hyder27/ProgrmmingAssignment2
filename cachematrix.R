@@ -1,15 +1,54 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Hyder Ali
+## cachematrix.R
 
-## Write a short comment describing this function
+##	Example of Usage: source("cachematrix.R")
+#> aSquareMatrix <- makeCacheMatrix(matrix(0:8, 8, 8))
+#> squareMatrix$getMatrix()
+#> aSquareMatrix$getCache() # will return NULL for the 1st time
+#> cacheSolve(aSquareMatrix)
+#> aSquareMatrix$getCache() # will return the solution
+
+## makes a cache matrix from a given matrix
 
 makeCacheMatrix <- function(x = matrix()) {
+
+	cacheMatrix <- NULL
+
+	setMatrix <- function(y) 
+	{
+		x<<-y
+		cacheMatrix <<- NULL
+		}
+		
+	getMatrix <- function() x
+    
+  setCache <- function(inverse) cacheMatrix <<- inverse
+
+  
+  getCache <- function() cacheMatrix
+  
+  list(setMatrix = setMatrix,
+       getMatrix = getMatrix,
+       setCache = setCache,
+       getCache = getCache)
 
 }
 
 
-## Write a short comment describing this function
+## Return the inverse of a given matrix utilizing the cache
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  
+  cacheMatrix <- x$getCache()
+  
+  if (!is.null(cacheMatrix)) {
+    message("loading cache matrix...")
+    return(cacheMatrix)
+  }
+  else {
+    dMatrix <- x$getMatrix()
+    cacheMatrix <- solve(dMatrix, ...)
+    x$setCache(cacheMatrix)
+    return(cacheMatrix)
+  }  
 }
